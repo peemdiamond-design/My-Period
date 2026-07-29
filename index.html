@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Period Tracker - Mint & Choc Retro</title>
+    <title>Dart's Period</title>
     <!-- Import Playfair Display font -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
@@ -20,7 +20,7 @@
 
         body {
             font-family: 'Playfair Display', serif;
-            /* Updated background image filename */
+            /* Background image */
             background-image: url('background.jpg');
             background-size: cover;
             background-position: center;
@@ -54,6 +54,18 @@
             font-size: 36px;
             filter: drop-shadow(2px 2px 0px var(--choc-dark));
             z-index: 10;
+        }
+
+        /* Styling for the new main title */
+        .main-title {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--choc-dark);
+            margin-top: 0;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 0px var(--mint-main);
         }
 
         .header {
@@ -264,6 +276,9 @@
 
     <div class="container">
         <div class="bow-decoration">🎀</div>
+
+        <!-- Added Title Here -->
+        <h1 class="main-title">Dart’s Period</h1>
 
         <div class="header">
             <button id="prevBtn">&lt;</button>
