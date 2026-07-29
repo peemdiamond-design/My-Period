@@ -155,7 +155,8 @@
             padding: 6px 2px;
             font-size: 15px;
             box-sizing: border-box;
-            border: 2px solid var(--choc-bar);
+            /* ปรับสีกรอบวันให้ตรงกับกรอบปุ่ม */
+            border: 2px solid var(--choc-border);
             box-shadow: 2px 2px 0px rgba(75, 46, 43, 0.3);
         }
 
@@ -165,8 +166,9 @@
 
         .day.period {
             background-color: #f2fcf7;
-            border: 2px solid #2ed573;
-            box-shadow: 2px 2px 0px rgba(46, 213, 115, 0.5);
+            /* ปรับสีกรอบวันประจำเดือนให้ตรงกับสีเขียวมินต์ของปุ่ม */
+            border: 2px solid var(--mint-main);
+            box-shadow: 2px 2px 0px rgba(168, 230, 207, 0.6);
         }
 
         .day-number {
@@ -277,7 +279,6 @@
     <div class="container">
         <div class="bow-decoration">🎀</div>
 
-        <!-- Added Title Here -->
         <h1 class="main-title">Dart’s Period</h1>
 
         <div class="header">
