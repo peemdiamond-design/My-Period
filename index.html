@@ -3,29 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ปฏิทินบันทึกประจำเดือน - 8-Bit Retro Mint & Choc</title>
-    <!-- นำเข้าฟอนต์สไตล์พิกเซล (Press Start 2P / VT323) สำหรับกลิ่นอายเรโทร -->
+    <title>ปฏิทินบันทึกประจำเดือน - Mint & Choc Retro</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
         :root {
-            --mint-bg: #c7ecee;
-            --mint-border: #2ed573;
+            --mint-main: #a8e6cf;
             --mint-box: #e0f6f7;
             --choc-dark: #4b2e2b;
-            --choc-main: #8d5b4c;
-            --choc-brown: #6f4e37;
+            --choc-bar: #5c3a21;
+            --choc-border: #38220f;
             --accent-pink: #ff6b81;
-            --accent-brown-heart: #a0522d; /* สีน้ำตาลสำหรับหัวใจ */
+            --accent-brown-heart: #a0522d;
             --white: #fffcf9;
         }
 
         body {
             font-family: 'VT323', monospace;
-            background-color: var(--mint-bg);
-            /* ลวดลายตารางเรโทรพิกเซล */
-            background-image: linear-gradient(rgba(46, 213, 115, 0.1) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(46, 213, 115, 0.1) 1px, transparent 1px);
-            background-size: 20px 20px;
+            /* สร้างพื้นหลังแบ่งครึ่งตามเรฟ: ครึ่งบนลาย Polka Dot มินต์จุดขาว+ดาวช็อก, ครึ่งล่างลายช็อกโกแลตบาร์ */
+            background-color: var(--mint-main);
+            background-image: 
+                /* ครึ่งล่าง: ลายตารางบล็อกช็อกโกแลตบาร์ */
+                linear-gradient(rgba(75, 46, 43, 0.85) 50%, rgba(56, 34, 15, 0.95) 50%),
+                /* ครึ่งบน: ลายจุด Polka dot ขาว บนพื้นมินต์ */
+                radial-gradient(#ffffff 20%, transparent 21%),
+                radial-gradient(#ffffff 20%, transparent 21%);
+            background-size: 100% 300px, 40px 40px, 40px 40px;
+            background-position: bottom, 0 0, 20px 20px;
+            background-repeat: repeat-x, repeat, repeat;
             color: var(--choc-dark);
             display: flex;
             justify-content: center;
@@ -38,25 +42,35 @@
 
         .container {
             background-color: var(--white);
-            /* ขอบแบบ Pixel Art (ใช้ border หนาและแข็ง) */
-            border: 4px solid var(--mint-border);
+            border: 4px solid var(--choc-border);
             box-shadow: 6px 6px 0px var(--choc-dark);
             width: 100%;
             max-width: 440px;
-            padding: 20px;
+            padding: 25px 20px 20px 20px;
             position: relative;
+            margin-top: 20px;
+        }
+
+        /* ตกแต่งรูปโบว์จำลองที่มุมบนขวาของกล่อง */
+        .bow-decoration {
+            position: absolute;
+            top: -25px;
+            right: -15px;
+            font-size: 36px;
+            filter: drop-shadow(2px 2px 0px var(--choc-dark));
+            z-index: 10;
         }
 
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: var(--choc-dark);
-            border: 3px solid var(--choc-brown);
+            background-color: var(--choc-bar);
+            border: 3px solid var(--choc-border);
             padding: 10px;
             color: var(--white);
             margin-bottom: 15px;
-            box-shadow: 3px 3px 0px rgba(0,0,0,0.2);
+            box-shadow: 3px 3px 0px rgba(0,0,0,0.3);
         }
 
         .header h2 {
@@ -66,16 +80,15 @@
         }
 
         .header button {
-            background-color: var(--mint-border);
+            background-color: var(--mint-main);
             color: var(--choc-dark);
-            border: 2px solid var(--white);
+            border: 2px solid var(--choc-border);
             padding: 4px 12px;
             cursor: pointer;
             font-family: 'VT323', monospace;
             font-size: 22px;
             font-weight: bold;
-            box-shadow: 2px 2px 0px var(--choc-dark);
-            transition: none;
+            box-shadow: 2px 2px 0px var(--choc-border);
         }
 
         .header button:active {
@@ -88,7 +101,7 @@
             justify-content: space-between;
             align-items: center;
             background-color: var(--mint-box);
-            border: 2px dashed var(--mint-border);
+            border: 2px dashed var(--mint-main);
             padding: 8px 12px;
             margin-bottom: 15px;
             font-size: 18px;
@@ -101,7 +114,7 @@
         }
 
         .mode-selector input[type="checkbox"] {
-            accent-color: var(--mint-border);
+            accent-color: var(--choc-bar);
             transform: scale(1.3);
             cursor: pointer;
         }
@@ -112,8 +125,7 @@
             text-align: center;
             font-weight: bold;
             margin-bottom: 8px;
-            color: var(--mint-border);
-            text-shadow: 1px 1px 0px var(--choc-dark);
+            color: var(--choc-bar);
             font-size: 22px;
         }
 
@@ -130,23 +142,24 @@
             justify-content: space-between;
             align-items: center;
             background-color: var(--white);
-            border: 2px solid var(--mint-border);
             cursor: pointer;
             padding: 4px 2px;
             font-size: 18px;
             box-sizing: border-box;
-            box-shadow: 2px 2px 0px rgba(46, 213, 115, 0.4);
+            /* ค่าเริ่มต้น: วันที่ยังไม่เป็นเมนส์ กรอบสีน้ำตาลช็อกโกแลต */
+            border: 2px solid var(--choc-bar);
+            box-shadow: 2px 2px 0px rgba(75, 46, 43, 0.3);
         }
 
         .day:hover {
             background-color: var(--mint-box);
-            border-color: var(--choc-dark);
         }
 
+        /* เมื่อเป็นเมนส์: เปลี่ยนกรอบเป็นสีเขียวมินต์ */
         .day.period {
-            background-color: #ffeef2;
-            border-color: var(--accent-pink);
-            box-shadow: 2px 2px 0px var(--accent-pink);
+            background-color: #f2fcf7;
+            border: 2px solid #2ed573;
+            box-shadow: 2px 2px 0px rgba(46, 213, 115, 0.4);
         }
 
         .day-number {
@@ -161,7 +174,7 @@
             min-height: 16px;
         }
 
-        /* Modal Styles (หน้าต่างบันทึก 8-bit) */
+        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -174,7 +187,7 @@
 
         .modal-content {
             background-color: var(--white);
-            border: 4px solid var(--mint-border);
+            border: 4px solid var(--choc-bar);
             box-shadow: 6px 6px 0px var(--choc-dark);
             padding: 20px;
             width: 90%;
@@ -184,7 +197,7 @@
         .modal h3 {
             margin-top: 0;
             color: var(--choc-dark);
-            border-bottom: 2px dashed var(--mint-border);
+            border-bottom: 2px dashed var(--choc-bar);
             padding-bottom: 6px;
             font-size: 24px;
         }
@@ -202,14 +215,14 @@
         }
 
         .form-group input[type="checkbox"] {
-            accent-color: var(--mint-border);
+            accent-color: var(--choc-bar);
             transform: scale(1.2);
         }
 
         .form-group textarea {
             width: 100%;
             padding: 8px;
-            border: 2px solid var(--mint-border);
+            border: 2px solid var(--choc-bar);
             background-color: var(--mint-box);
             resize: none;
             box-sizing: border-box;
@@ -232,16 +245,16 @@
 
         .modal-buttons button {
             padding: 6px 14px;
-            border: 2px solid var(--choc-dark);
+            border: 2px solid var(--choc-border);
             cursor: pointer;
             font-family: 'VT323', monospace;
             font-size: 20px;
             font-weight: bold;
-            box-shadow: 2px 2px 0px var(--choc-dark);
+            box-shadow: 2px 2px 0px var(--choc-border);
         }
 
         .btn-save { 
-            background-color: var(--mint-border); 
+            background-color: var(--mint-main); 
             color: var(--choc-dark); 
         }
         .btn-save:active { transform: translate(2px, 2px); box-shadow: none; }
@@ -256,6 +269,9 @@
 <body>
 
     <div class="container">
+        <!-- รูปโบว์ประดับมุมกล่อง -->
+        <div class="bow-decoration">🎀</div>
+
         <div class="header">
             <button id="prevBtn">&lt;</button>
             <h2 id="monthYear"></h2>
@@ -306,7 +322,7 @@
     </div>
 
     <script>
-        let trackerData = JSON.parse(localStorage.getItem('periodTrackerData8Bit')) || {};
+        let trackerData = JSON.parse(localStorage.getItem('periodTrackerDataCustomTheme')) || {};
         
         const calendarDays = document.getElementById('calendarDays');
         const monthYear = document.getElementById('monthYear');
@@ -357,11 +373,11 @@
 
                 if (trackerData[dateKey]) {
                     if (trackerData[dateKey].isPeriod) {
-                        dayDiv.classList.add('period');
+                        dayDiv.classList.add('period'); // กรอบสีเขียวมินต์เมื่อเป็นเมนส์
                         emojiContainer.innerHTML += '🩸';
                     }
                     if (trackerData[dateKey].isSex) {
-                        emojiContainer.innerHTML += '🤎'; // เปลี่ยนหัวใจเป็นสีน้ำตาล
+                        emojiContainer.innerHTML += '🤎'; // หัวใจสีน้ำตาล
                     }
                     if (trackerData[dateKey].note && trackerData[dateKey].note.trim() !== "") {
                         emojiContainer.innerHTML += '📝';
@@ -411,7 +427,7 @@
 
                 curr.setDate(curr.getDate() + 1);
             }
-            localStorage.setItem('periodTrackerData8Bit', JSON.stringify(trackerData));
+            localStorage.setItem('periodTrackerDataCustomTheme', JSON.stringify(trackerData));
         }
 
         function openModal(dateKey, day, month, year) {
@@ -448,7 +464,7 @@
                 delete trackerData[selectedDateStr];
             }
             
-            localStorage.setItem('periodTrackerData8Bit', JSON.stringify(trackerData));
+            localStorage.setItem('periodTrackerDataCustomTheme', JSON.stringify(trackerData));
             closeModal();
             renderCalendar();
         }
