@@ -3,29 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ปฏิทินบันทึกประจำเดือน 🍫 Mint & Choc</title>
+    <title>ปฏิทินบันทึกประจำเดือน - 8-Bit Retro Mint & Choc</title>
+    <!-- นำเข้าฟอนต์สไตล์พิกเซล (Press Start 2P / VT323) สำหรับกลิ่นอายเรโทร -->
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
         :root {
             --mint-bg: #c7ecee;
-            --mint-light: #e0f6f7;
+            --mint-border: #2ed573;
+            --mint-box: #e0f6f7;
             --choc-dark: #4b2e2b;
-            --choc-main: #6f4e37;
-            --choc-light: #8d5b4c;
+            --choc-main: #8d5b4c;
+            --choc-brown: #6f4e37;
             --accent-pink: #ff6b81;
-            --accent-purple: #9b59b6;
+            --accent-brown-heart: #a0522d; /* สีน้ำตาลสำหรับหัวใจ */
             --white: #fffcf9;
-            --cream: #fff5eb;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'VT323', monospace;
             background-color: var(--mint-bg);
-            /* ลวดลายดาวพื้นหลังแนวพาสเทล */
-            background-image: 
-                radial-gradient(#ffffff 15%, transparent 16%),
-                radial-gradient(#ffffff 15%, transparent 16%);
-            background-size: 60px 60px;
-            background-position: 0 0, 30px 30px;
+            /* ลวดลายตารางเรโทรพิกเซล */
+            background-image: linear-gradient(rgba(46, 213, 115, 0.1) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(46, 213, 115, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
             color: var(--choc-dark);
             display: flex;
             justify-content: center;
@@ -33,66 +33,65 @@
             min-height: 100vh;
             margin: 0;
             padding: 20px;
+            font-size: 20px;
         }
 
         .container {
-            background-color: var(--cream);
-            border: 4px solid var(--choc-main);
-            border-radius: 20px;
-            box-shadow: 0 12px 25px rgba(75, 46, 43, 0.25);
+            background-color: var(--white);
+            /* ขอบแบบ Pixel Art (ใช้ border หนาและแข็ง) */
+            border: 4px solid var(--mint-border);
+            box-shadow: 6px 6px 0px var(--choc-dark);
             width: 100%;
-            max-width: 480px;
-            padding: 25px;
+            max-width: 440px;
+            padding: 20px;
             position: relative;
         }
 
-        /* ตกแต่งหัวข้อแนวบล็อกช็อกโกแลต */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             background-color: var(--choc-dark);
-            padding: 12px 15px;
-            border-radius: 12px;
+            border: 3px solid var(--choc-brown);
+            padding: 10px;
             color: var(--white);
-            margin-bottom: 20px;
-            box-shadow: inset 0 3px 6px rgba(0,0,0,0.3);
+            margin-bottom: 15px;
+            box-shadow: 3px 3px 0px rgba(0,0,0,0.2);
         }
 
         .header h2 {
             margin: 0;
-            font-size: 1.2rem;
-            letter-spacing: 1px;
-            font-family: serif;
+            font-size: 28px;
+            letter-spacing: 2px;
         }
 
         .header button {
-            background-color: var(--choc-main);
-            color: var(--white);
-            border: 2px solid var(--choc-light);
-            padding: 6px 14px;
-            border-radius: 8px;
+            background-color: var(--mint-border);
+            color: var(--choc-dark);
+            border: 2px solid var(--white);
+            padding: 4px 12px;
             cursor: pointer;
-            font-size: 16px;
+            font-family: 'VT323', monospace;
+            font-size: 22px;
             font-weight: bold;
-            transition: all 0.2s;
+            box-shadow: 2px 2px 0px var(--choc-dark);
+            transition: none;
         }
 
-        .header button:hover {
-            background-color: var(--choc-light);
-            transform: scale(1.05);
+        .header button:active {
+            transform: translate(2px, 2px);
+            box-shadow: none;
         }
 
         .mode-selector {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: var(--mint-light);
-            border: 2px dashed var(--choc-main);
-            padding: 10px 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            font-size: 13px;
+            background-color: var(--mint-box);
+            border: 2px dashed var(--mint-border);
+            padding: 8px 12px;
+            margin-bottom: 15px;
+            font-size: 18px;
         }
 
         .mode-selector label {
@@ -102,8 +101,8 @@
         }
 
         .mode-selector input[type="checkbox"] {
-            accent-color: var(--choc-main);
-            transform: scale(1.2);
+            accent-color: var(--mint-border);
+            transform: scale(1.3);
             cursor: pointer;
         }
 
@@ -112,9 +111,10 @@
             grid-template-columns: repeat(7, 1fr);
             text-align: center;
             font-weight: bold;
-            margin-bottom: 10px;
-            color: var(--choc-main);
-            font-size: 14px;
+            margin-bottom: 8px;
+            color: var(--mint-border);
+            text-shadow: 1px 1px 0px var(--choc-dark);
+            font-size: 22px;
         }
 
         .days {
@@ -130,24 +130,23 @@
             justify-content: space-between;
             align-items: center;
             background-color: var(--white);
-            border: 2px solid #e2d2c3;
-            border-radius: 10px;
+            border: 2px solid var(--mint-border);
             cursor: pointer;
-            padding: 6px 2px;
-            font-size: 13px;
-            transition: all 0.2s;
+            padding: 4px 2px;
+            font-size: 18px;
             box-sizing: border-box;
+            box-shadow: 2px 2px 0px rgba(46, 213, 115, 0.4);
         }
 
         .day:hover {
-            background-color: var(--mint-light);
-            border-color: var(--choc-main);
-            transform: translateY(-2px);
+            background-color: var(--mint-box);
+            border-color: var(--choc-dark);
         }
 
         .day.period {
             background-color: #ffeef2;
             border-color: var(--accent-pink);
+            box-shadow: 2px 2px 0px var(--accent-pink);
         }
 
         .day-number {
@@ -157,101 +156,101 @@
 
         .day-emojis {
             display: flex;
-            gap: 2px;
-            font-size: 10px;
-            min-height: 14px;
+            gap: 1px;
+            font-size: 14px;
+            min-height: 16px;
         }
 
-        /* Modal Styles (หน้าต่างบันทึก) */
+        /* Modal Styles (หน้าต่างบันทึก 8-bit) */
         .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(75, 46, 43, 0.6);
-            backdrop-filter: blur(3px);
+            background-color: rgba(75, 46, 43, 0.7);
             justify-content: center;
             align-items: center;
             z-index: 1000;
         }
 
         .modal-content {
-            background-color: var(--cream);
-            border: 3px solid var(--choc-main);
-            padding: 25px;
-            border-radius: 15px;
+            background-color: var(--white);
+            border: 4px solid var(--mint-border);
+            box-shadow: 6px 6px 0px var(--choc-dark);
+            padding: 20px;
             width: 90%;
-            max-width: 340px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            max-width: 320px;
         }
 
         .modal h3 {
             margin-top: 0;
             color: var(--choc-dark);
-            font-family: serif;
-            border-bottom: 2px dashed var(--choc-main);
-            padding-bottom: 8px;
+            border-bottom: 2px dashed var(--mint-border);
+            padding-bottom: 6px;
+            font-size: 24px;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
             cursor: pointer;
-            font-weight: 500;
             color: var(--choc-dark);
+            font-size: 18px;
         }
 
         .form-group input[type="checkbox"] {
-            accent-color: var(--choc-main);
-            transform: scale(1.1);
+            accent-color: var(--mint-border);
+            transform: scale(1.2);
         }
 
         .form-group textarea {
             width: 100%;
-            padding: 10px;
-            border: 2px solid #e2d2c3;
-            background-color: var(--white);
-            border-radius: 8px;
+            padding: 8px;
+            border: 2px solid var(--mint-border);
+            background-color: var(--mint-box);
             resize: none;
             box-sizing: border-box;
             color: var(--choc-dark);
-            font-family: inherit;
+            font-family: 'VT323', monospace;
+            font-size: 18px;
         }
 
         .form-group textarea:focus {
             outline: none;
-            border-color: var(--choc-main);
+            border-color: var(--choc-dark);
         }
 
         .modal-buttons {
             display: flex;
             justify-content: flex-end;
             gap: 10px;
+            margin-top: 15px;
         }
 
         .modal-buttons button {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 8px;
+            padding: 6px 14px;
+            border: 2px solid var(--choc-dark);
             cursor: pointer;
+            font-family: 'VT323', monospace;
+            font-size: 20px;
             font-weight: bold;
+            box-shadow: 2px 2px 0px var(--choc-dark);
         }
 
         .btn-save { 
-            background-color: var(--choc-main); 
-            color: var(--white); 
-            border: 2px solid var(--choc-dark);
+            background-color: var(--mint-border); 
+            color: var(--choc-dark); 
         }
-        .btn-save:hover { background-color: var(--choc-dark); }
+        .btn-save:active { transform: translate(2px, 2px); box-shadow: none; }
         
         .btn-cancel { 
             background-color: #dcdde1; 
             color: #57606f; 
         }
-        .btn-cancel:hover { background-color: #bdc5c8; }
+        .btn-cancel:active { transform: translate(2px, 2px); box-shadow: none; }
     </style>
 </head>
 <body>
@@ -265,9 +264,9 @@
         
         <div class="mode-selector">
             <label>
-                <input type="checkbox" id="multiSelectMode"> โหมดเลือกหลายวัน (ประจำเดือน)
+                <input type="checkbox" id="multiSelectMode"> โหมดเลือกหลายวัน (🩸)
             </label>
-            <span id="actionHint" style="font-size: 11px; color: var(--accent-pink); font-weight: bold; display: none;">คลิกเลือกวันสิ้นสุด</span>
+            <span id="actionHint" style="font-size: 16px; color: var(--accent-pink); font-weight: bold; display: none;">เลือกวันสิ้นสุด</span>
         </div>
         
         <div class="weekdays">
@@ -277,26 +276,26 @@
         <div class="days" id="calendarDays"></div>
     </div>
 
-    <!-- Modal สำหรับเพิ่มโน้ตและ Sex -->
+    <!-- Modal สำหรับบันทึก -->
     <div class="modal" id="noteModal">
         <div class="modal-content">
             <h3 id="modalDateTitle">วันที่</h3>
             
             <div class="form-group">
                 <label>
-                    <input type="checkbox" id="isPeriod"> วันนี้มีประจำเดือน 🩸
+                    <input type="checkbox" id="isPeriod"> มีประจำเดือน 🩸
                 </label>
             </div>
 
             <div class="form-group">
                 <label>
-                    <input type="checkbox" id="isSex"> มีเพศสัมพันธ์ 💜
+                    <input type="checkbox" id="isSex"> มีเพศสัมพันธ์ <span style="color: var(--accent-brown-heart);">🤎</span>
                 </label>
             </div>
             
             <div class="form-group">
-                <label for="noteText">บันทึกอาการหรือโน้ตเพิ่มเติม:</label>
-                <textarea id="noteText" rows="3" placeholder="เช่น ปวดท้อง, อารมณ์แปรปรวน..."></textarea>
+                <label for="noteText">บันทึกโน้ต:</label>
+                <textarea id="noteText" rows="3" placeholder="พิมพ์บันทึกที่นี่..."></textarea>
             </div>
             
             <div class="modal-buttons">
@@ -307,7 +306,7 @@
     </div>
 
     <script>
-        let trackerData = JSON.parse(localStorage.getItem('periodTrackerDataMint')) || {};
+        let trackerData = JSON.parse(localStorage.getItem('periodTrackerData8Bit')) || {};
         
         const calendarDays = document.getElementById('calendarDays');
         const monthYear = document.getElementById('monthYear');
@@ -362,7 +361,7 @@
                         emojiContainer.innerHTML += '🩸';
                     }
                     if (trackerData[dateKey].isSex) {
-                        emojiContainer.innerHTML += '💜';
+                        emojiContainer.innerHTML += '🤎'; // เปลี่ยนหัวใจเป็นสีน้ำตาล
                     }
                     if (trackerData[dateKey].note && trackerData[dateKey].note.trim() !== "") {
                         emojiContainer.innerHTML += '📝';
@@ -412,12 +411,12 @@
 
                 curr.setDate(curr.getDate() + 1);
             }
-            localStorage.setItem('periodTrackerDataMint', JSON.stringify(trackerData));
+            localStorage.setItem('periodTrackerData8Bit', JSON.stringify(trackerData));
         }
 
         function openModal(dateKey, day, month, year) {
             selectedDateStr = dateKey;
-            modalDateTitle.textContent = `บันทึกวันที่ ${day} ${thaiMonths[month]} ${year + 543}`;
+            modalDateTitle.textContent = `วันที่ ${day} ${thaiMonths[month]} ${year + 543}`;
             
             if (trackerData[dateKey]) {
                 isPeriodCheckbox.checked = trackerData[dateKey].isPeriod || false;
@@ -449,7 +448,7 @@
                 delete trackerData[selectedDateStr];
             }
             
-            localStorage.setItem('periodTrackerDataMint', JSON.stringify(trackerData));
+            localStorage.setItem('periodTrackerData8Bit', JSON.stringify(trackerData));
             closeModal();
             renderCalendar();
         }
