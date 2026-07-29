@@ -8,28 +8,23 @@
     <style>
         :root {
             --mint-main: #a8e6cf;
-            --mint-box: #e0f6f7;
+            --mint-box: rgba(224, 246, 247, 0.9);
             --choc-dark: #4b2e2b;
             --choc-bar: #5c3a21;
             --choc-border: #38220f;
             --accent-pink: #ff6b81;
             --accent-brown-heart: #a0522d;
-            --white: #fffcf9;
+            --white: rgba(255, 252, 249, 0.95);
         }
 
         body {
             font-family: 'VT323', monospace;
-            /* สร้างพื้นหลังแบ่งครึ่งตามเรฟ: ครึ่งบนลาย Polka Dot มินต์จุดขาว+ดาวช็อก, ครึ่งล่างลายช็อกโกแลตบาร์ */
-            background-color: var(--mint-main);
-            background-image: 
-                /* ครึ่งล่าง: ลายตารางบล็อกช็อกโกแลตบาร์ */
-                linear-gradient(rgba(75, 46, 43, 0.85) 50%, rgba(56, 34, 15, 0.95) 50%),
-                /* ครึ่งบน: ลายจุด Polka dot ขาว บนพื้นมินต์ */
-                radial-gradient(#ffffff 20%, transparent 21%),
-                radial-gradient(#ffffff 20%, transparent 21%);
-            background-size: 100% 300px, 40px 40px, 40px 40px;
-            background-position: bottom, 0 0, 20px 20px;
-            background-repeat: repeat-x, repeat, repeat;
+            /* ใช้รูปภาพที่คุณส่งมาเป็น Background จริง และจัดให้เต็มจอ */
+            background-image: url('b3ae4f6b-f8c5-4647-ad98-97e22c748bf6_3.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             color: var(--choc-dark);
             display: flex;
             justify-content: center;
@@ -48,10 +43,9 @@
             max-width: 440px;
             padding: 25px 20px 20px 20px;
             position: relative;
-            margin-top: 20px;
+            backdrop-filter: blur(2px);
         }
 
-        /* ตกแต่งรูปโบว์จำลองที่มุมบนขวาของกล่อง */
         .bow-decoration {
             position: absolute;
             top: -25px;
@@ -68,7 +62,7 @@
             background-color: var(--choc-bar);
             border: 3px solid var(--choc-border);
             padding: 10px;
-            color: var(--white);
+            color: #fff;
             margin-bottom: 15px;
             box-shadow: 3px 3px 0px rgba(0,0,0,0.3);
         }
@@ -101,7 +95,7 @@
             justify-content: space-between;
             align-items: center;
             background-color: var(--mint-box);
-            border: 2px dashed var(--mint-main);
+            border: 2px dashed var(--choc-bar);
             padding: 8px 12px;
             margin-bottom: 15px;
             font-size: 18px;
@@ -127,6 +121,7 @@
             margin-bottom: 8px;
             color: var(--choc-bar);
             font-size: 22px;
+            text-shadow: 1px 1px 0px #fff;
         }
 
         .days {
@@ -146,7 +141,7 @@
             padding: 4px 2px;
             font-size: 18px;
             box-sizing: border-box;
-            /* ค่าเริ่มต้น: วันที่ยังไม่เป็นเมนส์ กรอบสีน้ำตาลช็อกโกแลต */
+            /* วันที่ยังไม่เป็นเมนส์: กรอบสีน้ำตาลช็อกโกแลต */
             border: 2px solid var(--choc-bar);
             box-shadow: 2px 2px 0px rgba(75, 46, 43, 0.3);
         }
@@ -155,11 +150,11 @@
             background-color: var(--mint-box);
         }
 
-        /* เมื่อเป็นเมนส์: เปลี่ยนกรอบเป็นสีเขียวมินต์ */
+        /* เมื่อเป็นเมนส์: เปลี่ยนกรอบเป็นสีเขียวมินต์เด่นชัด */
         .day.period {
             background-color: #f2fcf7;
             border: 2px solid #2ed573;
-            box-shadow: 2px 2px 0px rgba(46, 213, 115, 0.4);
+            box-shadow: 2px 2px 0px rgba(46, 213, 115, 0.5);
         }
 
         .day-number {
@@ -186,7 +181,7 @@
         }
 
         .modal-content {
-            background-color: var(--white);
+            background-color: #fffcf9;
             border: 4px solid var(--choc-bar);
             box-shadow: 6px 6px 0px var(--choc-dark);
             padding: 20px;
@@ -223,7 +218,7 @@
             width: 100%;
             padding: 8px;
             border: 2px solid var(--choc-bar);
-            background-color: var(--mint-box);
+            background-color: #e0f6f7;
             resize: none;
             box-sizing: border-box;
             color: var(--choc-dark);
@@ -269,7 +264,6 @@
 <body>
 
     <div class="container">
-        <!-- รูปโบว์ประดับมุมกล่อง -->
         <div class="bow-decoration">🎀</div>
 
         <div class="header">
@@ -322,7 +316,7 @@
     </div>
 
     <script>
-        let trackerData = JSON.parse(localStorage.getItem('periodTrackerDataCustomTheme')) || {};
+        let trackerData = JSON.parse(localStorage.getItem('periodTrackerDataImgBg')) || {};
         
         const calendarDays = document.getElementById('calendarDays');
         const monthYear = document.getElementById('monthYear');
@@ -373,11 +367,11 @@
 
                 if (trackerData[dateKey]) {
                     if (trackerData[dateKey].isPeriod) {
-                        dayDiv.classList.add('period'); // กรอบสีเขียวมินต์เมื่อเป็นเมนส์
+                        dayDiv.classList.add('period');
                         emojiContainer.innerHTML += '🩸';
                     }
                     if (trackerData[dateKey].isSex) {
-                        emojiContainer.innerHTML += '🤎'; // หัวใจสีน้ำตาล
+                        emojiContainer.innerHTML += '🤎';
                     }
                     if (trackerData[dateKey].note && trackerData[dateKey].note.trim() !== "") {
                         emojiContainer.innerHTML += '📝';
@@ -427,7 +421,7 @@
 
                 curr.setDate(curr.getDate() + 1);
             }
-            localStorage.setItem('periodTrackerDataCustomTheme', JSON.stringify(trackerData));
+            localStorage.setItem('periodTrackerDataImgBg', JSON.stringify(trackerData));
         }
 
         function openModal(dateKey, day, month, year) {
@@ -464,7 +458,7 @@
                 delete trackerData[selectedDateStr];
             }
             
-            localStorage.setItem('periodTrackerDataCustomTheme', JSON.stringify(trackerData));
+            localStorage.setItem('periodTrackerDataImgBg', JSON.stringify(trackerData));
             closeModal();
             renderCalendar();
         }
