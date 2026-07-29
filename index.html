@@ -96,14 +96,15 @@
             aspect-ratio: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             background-color: #f1f2f6;
             border-radius: 10px;
             cursor: pointer;
-            position: relative;
-            font-size: 14px;
+            padding: 5px 2px;
+            font-size: 13px;
             transition: all 0.2s;
+            box-sizing: border-box;
         }
 
         .day:hover {
@@ -111,24 +112,20 @@
         }
 
         .day.period {
-            background-color: var(--primary-color);
-            color: var(--white);
+            background-color: #ffeff3;
+            border: 1px solid var(--primary-color);
         }
 
-        .day.multi-selected {
-            border: 2px dashed var(--primary-color);
-            background-color: #fff0f3;
+        .day-number {
+            font-weight: bold;
         }
 
-        .indicators {
+        .day-emojis {
             display: flex;
-            gap: 3px;
-            position: absolute;
-            bottom: 5px;
+            gap: 2px;
+            font-size: 11px;
+            min-height: 14px;
         }
-
-        .dot-note { width: 5px; height: 5px; background-color: #2ed573; border-radius: 50%; }
-        .dot-sex { width: 5px; height: 5px; background-color: var(--secondary-color); border-radius: 50%; }
 
         /* Modal Styles */
         .modal {
@@ -161,6 +158,7 @@
         .form-group label {
             display: block;
             margin-bottom: 5px;
+            cursor: pointer;
         }
 
         .form-group textarea {
@@ -202,7 +200,7 @@
             <label>
                 <input type="checkbox" id="multiSelectMode"> โหมดเลือกหลายวัน (ประจำเดือน)
             </label>
-            <span id="actionHint" style="font-size: 12px; color: #ff4757; display: none;">คลิกเลือกวันสิ้นสุด</span>
+            <span id="actionHint" style="font-size: 11px; color: #ff4757; display: none;">คลิกเลือกวันสิ้นสุด</span>
         </div>
         
         <div class="weekdays">
@@ -256,9 +254,6 @@
         
         let currentDate = new Date();
         let selectedDateStr = "";
-        
-        // ตัวแปรสำหรับโหมดเลือกหลายวัน
-        let isMultiSelecting = false;
         let startDateKey = null;
 
         const thaiMonths = [
@@ -283,28 +278,33 @@
             for (let i = 1; i <= daysInMonth; i++) {
                 const dayDiv = document.createElement('div');
                 dayDiv.classList.add('day');
-                dayDiv.textContent = i;
 
                 const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
                 
+                // เลขวันที่
+                const numSpan = document.createElement('div');
+                numSpan.classList.add('day-number');
+                numSpan.textContent = i;
+                dayDiv.appendChild(numSpan);
+
+                // พื้นที่แสดงอีโมจิ
+                const emojiContainer = document.createElement('div');
+                emojiContainer.classList.add('day-emojis');
+
                 if (trackerData[dateKey]) {
-                    if (trackerData[dateKey].isPeriod) dayDiv.classList.add('period');
-                    
-                    const indicators = document.createElement('div');
-                    indicators.classList.add('indicators');
-                    
+                    if (trackerData[dateKey].isPeriod) {
+                        dayDiv.classList.add('period');
+                        emojiContainer.innerHTML += '🩸';
+                    }
                     if (trackerData[dateKey].isSex) {
-                        const sexDot = document.createElement('div');
-                        sexDot.classList.add('dot-sex');
-                        indicators.appendChild(sexDot);
+                        emojiContainer.innerHTML += '💜';
                     }
                     if (trackerData[dateKey].note && trackerData[dateKey].note.trim() !== "") {
-                        const noteDot = document.createElement('div');
-                        noteDot.classList.add('dot-note');
-                        indicators.appendChild(noteDot);
+                        emojiContainer.innerHTML += '📝';
                     }
-                    dayDiv.appendChild(indicators);
                 }
+
+                dayDiv.appendChild(emojiContainer);
 
                 // Event คลิกเลือกวัน
                 dayDiv.addEventListener('click', () => handleDayClick(dateKey, i, month, year));
@@ -318,10 +318,7 @@
                 if (!startDateKey) {
                     startDateKey = dateKey;
                     actionHint.style.display = 'inline';
-                    // ทำไฮไลต์วันแรก
-                    renderCalendar();
                 } else {
-                    // ทำการบันทึกประจำเดือนยาวตั้งแต่ startDateKey ถึง dateKey ปัจจุบัน
                     applyMultiSelectPeriod(startDateKey, dateKey);
                     startDateKey = null;
                     multiSelectMode.checked = false;
@@ -374,7 +371,7 @@
         }
 
         function closeModal() {
-            noteModal.style.display = 'none';
+            noteModal.style.display, noteModal.style.display = 'none';
         }
 
         function saveData() {
@@ -386,7 +383,6 @@
             trackerData[selectedDateStr].isSex = isSexCheckbox.checked;
             trackerData[selectedDateStr].note = noteText.value;
             
-            // ลบข้อมูลทิ้งถ้าไม่มีการติ๊กหรือจดอะไรเลย เพื่อประหยัดพื้นที่
             if (!trackerData[selectedDateStr].isPeriod && !trackerData[selectedDateStr].isSex && trackerData[selectedDateStr].note.trim() === "") {
                 delete trackerData[selectedDateStr];
             }
