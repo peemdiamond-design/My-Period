@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ปฏิทินบันทึกประจำเดือน - Mint & Choc Retro</title>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <title>Period Tracker - Mint & Choc Retro</title>
+    <!-- Import Playfair Display font -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
             --mint-main: #a8e6cf;
-            --mint-box: rgba(224, 246, 247, 0.9);
+            --mint-box: rgba(224, 246, 247, 0.95);
             --choc-dark: #4b2e2b;
             --choc-bar: #5c3a21;
             --choc-border: #38220f;
@@ -18,8 +19,7 @@
         }
 
         body {
-            font-family: 'VT323', monospace;
-            /* ใช้รูปภาพที่คุณส่งมาเป็น Background จริง และจัดให้เต็มจอ */
+            font-family: 'Playfair Display', serif;
             background-image: url('b3ae4f6b-f8c5-4647-ad98-97e22c748bf6_3.jpg');
             background-size: cover;
             background-position: center;
@@ -32,7 +32,7 @@
             min-height: 100vh;
             margin: 0;
             padding: 20px;
-            font-size: 20px;
+            font-size: 16px;
         }
 
         .container {
@@ -40,7 +40,7 @@
             border: 4px solid var(--choc-border);
             box-shadow: 6px 6px 0px var(--choc-dark);
             width: 100%;
-            max-width: 440px;
+            max-width: 460px;
             padding: 25px 20px 20px 20px;
             position: relative;
             backdrop-filter: blur(2px);
@@ -61,7 +61,7 @@
             align-items: center;
             background-color: var(--choc-bar);
             border: 3px solid var(--choc-border);
-            padding: 10px;
+            padding: 10px 15px;
             color: #fff;
             margin-bottom: 15px;
             box-shadow: 3px 3px 0px rgba(0,0,0,0.3);
@@ -69,8 +69,9 @@
 
         .header h2 {
             margin: 0;
-            font-size: 28px;
-            letter-spacing: 2px;
+            font-size: 22px;
+            letter-spacing: 1px;
+            font-weight: 700;
         }
 
         .header button {
@@ -79,8 +80,8 @@
             border: 2px solid var(--choc-border);
             padding: 4px 12px;
             cursor: pointer;
-            font-family: 'VT323', monospace;
-            font-size: 22px;
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
             font-weight: bold;
             box-shadow: 2px 2px 0px var(--choc-border);
         }
@@ -98,7 +99,7 @@
             border: 2px dashed var(--choc-bar);
             padding: 8px 12px;
             margin-bottom: 15px;
-            font-size: 18px;
+            font-size: 14px;
         }
 
         .mode-selector label {
@@ -109,7 +110,7 @@
 
         .mode-selector input[type="checkbox"] {
             accent-color: var(--choc-bar);
-            transform: scale(1.3);
+            transform: scale(1.2);
             cursor: pointer;
         }
 
@@ -120,7 +121,7 @@
             font-weight: bold;
             margin-bottom: 8px;
             color: var(--choc-bar);
-            font-size: 22px;
+            font-size: 16px;
             text-shadow: 1px 1px 0px #fff;
         }
 
@@ -138,10 +139,9 @@
             align-items: center;
             background-color: var(--white);
             cursor: pointer;
-            padding: 4px 2px;
-            font-size: 18px;
+            padding: 6px 2px;
+            font-size: 15px;
             box-sizing: border-box;
-            /* วันที่ยังไม่เป็นเมนส์: กรอบสีน้ำตาลช็อกโกแลต */
             border: 2px solid var(--choc-bar);
             box-shadow: 2px 2px 0px rgba(75, 46, 43, 0.3);
         }
@@ -150,7 +150,6 @@
             background-color: var(--mint-box);
         }
 
-        /* เมื่อเป็นเมนส์: เปลี่ยนกรอบเป็นสีเขียวมินต์เด่นชัด */
         .day.period {
             background-color: #f2fcf7;
             border: 2px solid #2ed573;
@@ -165,11 +164,10 @@
         .day-emojis {
             display: flex;
             gap: 1px;
-            font-size: 14px;
-            min-height: 16px;
+            font-size: 12px;
+            min-height: 14px;
         }
 
-        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -194,7 +192,7 @@
             color: var(--choc-dark);
             border-bottom: 2px dashed var(--choc-bar);
             padding-bottom: 6px;
-            font-size: 24px;
+            font-size: 18px;
         }
 
         .form-group {
@@ -206,7 +204,7 @@
             margin-bottom: 4px;
             cursor: pointer;
             color: var(--choc-dark);
-            font-size: 18px;
+            font-size: 14px;
         }
 
         .form-group input[type="checkbox"] {
@@ -222,8 +220,8 @@
             resize: none;
             box-sizing: border-box;
             color: var(--choc-dark);
-            font-family: 'VT323', monospace;
-            font-size: 18px;
+            font-family: 'Playfair Display', serif;
+            font-size: 14px;
         }
 
         .form-group textarea:focus {
@@ -242,8 +240,8 @@
             padding: 6px 14px;
             border: 2px solid var(--choc-border);
             cursor: pointer;
-            font-family: 'VT323', monospace;
-            font-size: 20px;
+            font-family: 'Playfair Display', serif;
+            font-size: 14px;
             font-weight: bold;
             box-shadow: 2px 2px 0px var(--choc-border);
         }
@@ -274,49 +272,48 @@
         
         <div class="mode-selector">
             <label>
-                <input type="checkbox" id="multiSelectMode"> โหมดเลือกหลายวัน (🩸)
+                <input type="checkbox" id="multiSelectMode"> Multi-select (🩸)
             </label>
-            <span id="actionHint" style="font-size: 16px; color: var(--accent-pink); font-weight: bold; display: none;">เลือกวันสิ้นสุด</span>
+            <span id="actionHint" style="font-size: 13px; color: var(--accent-pink); font-weight: bold; display: none;">Select end date</span>
         </div>
         
         <div class="weekdays">
-            <div>อา</div><div>จ</div><div>อ</div><div>พ</div><div>พฤ</div><div>ศ</div><div>ส</div>
+            <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
         </div>
         
         <div class="days" id="calendarDays"></div>
     </div>
 
-    <!-- Modal สำหรับบันทึก -->
     <div class="modal" id="noteModal">
         <div class="modal-content">
-            <h3 id="modalDateTitle">วันที่</h3>
+            <h3 id="modalDateTitle">Date</h3>
             
             <div class="form-group">
                 <label>
-                    <input type="checkbox" id="isPeriod"> มีประจำเดือน 🩸
+                    <input type="checkbox" id="isPeriod"> Period 🩸
                 </label>
             </div>
 
             <div class="form-group">
                 <label>
-                    <input type="checkbox" id="isSex"> มีเพศสัมพันธ์ <span style="color: var(--accent-brown-heart);">🤎</span>
+                    <input type="checkbox" id="isSex"> Sexual Activity <span style="color: var(--accent-brown-heart);">🤎</span>
                 </label>
             </div>
             
             <div class="form-group">
-                <label for="noteText">บันทึกโน้ต:</label>
-                <textarea id="noteText" rows="3" placeholder="พิมพ์บันทึกที่นี่..."></textarea>
+                <label for="noteText">Notes:</label>
+                <textarea id="noteText" rows="3" placeholder="Write your notes here..."></textarea>
             </div>
             
             <div class="modal-buttons">
-                <button class="btn-cancel" id="cancelBtn">ยกเลิก</button>
-                <button class="btn-save" id="saveBtn">บันทึก</button>
+                <button class="btn-cancel" id="cancelBtn">Cancel</button>
+                <button class="btn-save" id="saveBtn">Save</button>
             </div>
         </div>
     </div>
 
     <script>
-        let trackerData = JSON.parse(localStorage.getItem('periodTrackerDataImgBg')) || {};
+        let trackerData = JSON.parse(localStorage.getItem('periodTrackerDataEnglish')) || {};
         
         const calendarDays = document.getElementById('calendarDays');
         const monthYear = document.getElementById('monthYear');
@@ -332,16 +329,16 @@
         let selectedDateStr = "";
         let startDateKey = null;
 
-        const thaiMonths = [
-            "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
-            "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
+        const englishMonths = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
         ];
 
         function renderCalendar() {
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
             
-            monthYear.textContent = `${thaiMonths[month]} ${year + 543}`;
+            monthYear.textContent = `${englishMonths[month]} ${year}`;
             calendarDays.innerHTML = '';
 
             const firstDay = new Date(year, month, 1).getDay();
@@ -421,12 +418,12 @@
 
                 curr.setDate(curr.getDate() + 1);
             }
-            localStorage.setItem('periodTrackerDataImgBg', JSON.stringify(trackerData));
+            localStorage.setItem('periodTrackerDataEnglish', JSON.stringify(trackerData));
         }
 
         function openModal(dateKey, day, month, year) {
             selectedDateStr = dateKey;
-            modalDateTitle.textContent = `วันที่ ${day} ${thaiMonths[month]} ${year + 543}`;
+            modalDateTitle.textContent = `Date: ${englishMonths[month]} ${day}, ${year}`;
             
             if (trackerData[dateKey]) {
                 isPeriodCheckbox.checked = trackerData[dateKey].isPeriod || false;
@@ -458,7 +455,7 @@
                 delete trackerData[selectedDateStr];
             }
             
-            localStorage.setItem('periodTrackerDataImgBg', JSON.stringify(trackerData));
+            localStorage.setItem('periodTrackerDataEnglish', JSON.stringify(trackerData));
             closeModal();
             renderCalendar();
         }
