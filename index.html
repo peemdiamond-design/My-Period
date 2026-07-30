@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dart's Period</title>
+    <title>Dart's Period - Cloud Sync</title>
     <!-- Import Playfair Display font -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
+        /* Default Theme: Mint & Choc */
         :root {
             --mint-main: #a8e6cf;
             --mint-box: rgba(224, 246, 247, 0.95);
@@ -18,9 +19,20 @@
             --white: rgba(255, 252, 249, 0.95);
         }
 
+        /* Theme: Strawberry & Choc */
+        body.theme-strawberry {
+            --mint-main: #ffb7b2;
+            --mint-box: rgba(255, 235, 238, 0.95);
+        }
+
+        /* Theme: Matcha & Choc */
+        body.theme-matcha {
+            --mint-main: #c1d5a4;
+            --mint-box: rgba(233, 245, 219, 0.95);
+        }
+
         body {
             font-family: 'Playfair Display', serif;
-            /* Background image */
             background-image: url('background.jpg');
             background-size: cover;
             background-position: center;
@@ -34,6 +46,7 @@
             margin: 0;
             padding: 20px;
             font-size: 16px;
+            transition: all 0.3s ease;
         }
 
         .container {
@@ -45,6 +58,8 @@
             padding: 25px 20px 20px 20px;
             position: relative;
             backdrop-filter: blur(2px);
+            transition: all 0.3s ease;
+            box-sizing: border-box;
         }
 
         .bow-decoration {
@@ -56,16 +71,30 @@
             z-index: 10;
         }
 
-        /* Styling for the new main title */
         .main-title {
             text-align: center;
             font-size: 32px;
             font-weight: 700;
             color: var(--choc-dark);
             margin-top: 0;
-            margin-bottom: 20px;
+            margin-bottom: 5px;
             letter-spacing: 1px;
             text-shadow: 2px 2px 0px var(--mint-main);
+            transition: text-shadow 0.3s ease;
+        }
+
+        /* Cloud sync indicator */
+        .sync-status {
+            text-align: center;
+            font-size: 12px;
+            color: #27ae60;
+            margin-bottom: 15px;
+            font-weight: bold;
+            font-family: sans-serif;
+        }
+        
+        .sync-status.loading {
+            color: #f39c12;
         }
 
         .header {
@@ -97,6 +126,7 @@
             font-size: 18px;
             font-weight: bold;
             box-shadow: 2px 2px 0px var(--choc-border);
+            transition: background-color 0.3s ease;
         }
 
         .header button:active {
@@ -104,21 +134,43 @@
             box-shadow: none;
         }
 
-        .mode-selector {
+        .controls-row {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .theme-selector, .mode-selector {
             background-color: var(--mint-box);
             border: 2px dashed var(--choc-bar);
             padding: 8px 12px;
-            margin-bottom: 15px;
             font-size: 14px;
+            display: flex;
+            align-items: center;
+            color: var(--choc-dark);
+            font-weight: bold;
+            flex: 1;
+        }
+
+        .theme-selector select {
+            margin-left: 8px;
+            font-family: 'Playfair Display', serif;
+            font-weight: bold;
+            color: var(--choc-dark);
+            background: transparent;
+            border: 1px solid var(--choc-bar);
+            outline: none;
+            cursor: pointer;
+            width: 100%;
         }
 
         .mode-selector label {
             cursor: pointer;
-            font-weight: bold;
-            color: var(--choc-dark);
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .mode-selector input[type="checkbox"] {
@@ -140,7 +192,7 @@
 
         .days {
             display: grid;
-            grid-template-columns: repeat(7, 1fr);
+            grid-template-columns: repeat(7, minmax(0, 1fr));
             gap: 6px;
         }
 
@@ -152,12 +204,13 @@
             align-items: center;
             background-color: var(--white);
             cursor: pointer;
-            padding: 6px 2px;
+            padding: 4px 2px;
             font-size: 15px;
             box-sizing: border-box;
-            /* ปรับสีกรอบวันให้ตรงกับกรอบปุ่ม */
             border: 2px solid var(--choc-border);
             box-shadow: 2px 2px 0px rgba(75, 46, 43, 0.3);
+            transition: background-color 0.2s, border-color 0.3s;
+            overflow: hidden;
         }
 
         .day:hover {
@@ -165,22 +218,49 @@
         }
 
         .day.period {
-            background-color: #f2fcf7;
-            /* ปรับสีกรอบวันประจำเดือนให้ตรงกับสีเขียวมินต์ของปุ่ม */
-            border: 2px solid var(--mint-main);
-            box-shadow: 2px 2px 0px rgba(168, 230, 207, 0.6);
+            background-color: var(--white);
+            border: 3px solid var(--mint-main);
+            box-shadow: 2px 2px 0px var(--mint-main);
         }
 
         .day-number {
             font-weight: bold;
             color: var(--choc-dark);
+            margin-top: 2px;
         }
 
         .day-emojis {
             display: flex;
-            gap: 1px;
+            gap: 2px;
             font-size: 12px;
-            min-height: 14px;
+            min-height: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 2px;
+        }
+
+        .virtual-pet {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 45px;
+            z-index: 100;
+            background: var(--white);
+            border: 4px solid var(--choc-border);
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 4px 4px 0px var(--choc-dark);
+            transition: all 0.3s;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .virtual-pet:hover {
+            transform: scale(1.1);
         }
 
         .modal {
@@ -200,6 +280,7 @@
             padding: 20px;
             width: 90%;
             max-width: 320px;
+            box-sizing: border-box;
         }
 
         .modal h3 {
@@ -215,28 +296,39 @@
         }
 
         .form-group label {
-            display: block;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             margin-bottom: 4px;
             cursor: pointer;
             color: var(--choc-dark);
             font-size: 14px;
         }
 
-        .form-group input[type="checkbox"] {
+        .form-group input[type="checkbox"], .form-group input[type="radio"] {
             accent-color: var(--choc-bar);
             transform: scale(1.2);
+        }
+
+        .flow-options {
+            display: none;
+            margin-top: 8px;
+            padding-left: 25px;
+            flex-direction: column;
+            gap: 5px;
         }
 
         .form-group textarea {
             width: 100%;
             padding: 8px;
             border: 2px solid var(--choc-bar);
-            background-color: #e0f6f7;
+            background-color: var(--mint-box);
             resize: none;
             box-sizing: border-box;
             color: var(--choc-dark);
             font-family: 'Playfair Display', serif;
             font-size: 14px;
+            transition: background-color 0.3s;
         }
 
         .form-group textarea:focus {
@@ -259,6 +351,7 @@
             font-size: 14px;
             font-weight: bold;
             box-shadow: 2px 2px 0px var(--choc-border);
+            transition: background-color 0.3s;
         }
 
         .btn-save { 
@@ -272,6 +365,13 @@
             color: #57606f; 
         }
         .btn-cancel:active { transform: translate(2px, 2px); box-shadow: none; }
+
+        .confetti-piece {
+            position: fixed;
+            z-index: 9999;
+            pointer-events: none;
+            transition: top 2s ease-in, opacity 2s ease-in;
+        }
     </style>
 </head>
 <body>
@@ -280,6 +380,8 @@
         <div class="bow-decoration">🎀</div>
 
         <h1 class="main-title">Dart’s Period</h1>
+        <!-- แสดงสถานะการเชื่อมต่อฐานข้อมูล -->
+        <div id="syncStatus" class="sync-status loading">☁️ Connecting to cloud...</div>
 
         <div class="header">
             <button id="prevBtn">&lt;</button>
@@ -287,12 +389,23 @@
             <button id="nextBtn">&gt;</button>
         </div>
         
-        <div class="mode-selector">
-            <label>
-                <input type="checkbox" id="multiSelectMode"> Multi-select (🩸)
-            </label>
-            <span id="actionHint" style="font-size: 13px; color: var(--accent-pink); font-weight: bold; display: none;">Select end date</span>
+        <div class="controls-row">
+            <div class="theme-selector">
+                🎨
+                <select id="themeSelect">
+                    <option value="mint">Mint & Choc</option>
+                    <option value="strawberry">Strawberry</option>
+                    <option value="matcha">Matcha & Choc</option>
+                </select>
+            </div>
+            <div class="mode-selector">
+                <label>
+                    Multi-select 🩸
+                    <input type="checkbox" id="multiSelectMode"> 
+                </label>
+            </div>
         </div>
+        <div id="actionHint" style="font-size: 12px; color: var(--accent-pink); font-weight: bold; display: none; text-align: right; margin-top: -10px; margin-bottom: 10px;">Select end date...</div>
         
         <div class="weekdays">
             <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
@@ -301,6 +414,10 @@
         <div class="days" id="calendarDays"></div>
     </div>
 
+    <!-- Virtual Pet -->
+    <div class="virtual-pet" id="virtualPet" title="I'm here for you!">🐻✨</div>
+
+    <!-- Modal -->
     <div class="modal" id="noteModal">
         <div class="modal-content">
             <h3 id="modalDateTitle">Date</h3>
@@ -309,6 +426,11 @@
                 <label>
                     <input type="checkbox" id="isPeriod"> Period 🩸
                 </label>
+                <div class="flow-options" id="flowOptions">
+                    <label><input type="radio" name="flowLevel" value="Light"> Light 💧</label>
+                    <label><input type="radio" name="flowLevel" value="Medium" checked> Medium 🩸</label>
+                    <label><input type="radio" name="flowLevel" value="Heavy"> Heavy 🌊</label>
+                </div>
             </div>
 
             <div class="form-group">
@@ -329,18 +451,49 @@
         </div>
     </div>
 
-    <script>
-        let trackerData = JSON.parse(localStorage.getItem('periodTrackerDataEnglish')) || {};
+    <!-- Firebase SDK Setup -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCn3G9x20xeQjdHoImaekYZl-xavNq_oH0",
+            authDomain: "my-period-d2e81.firebaseapp.com",
+            projectId: "my-period-d2e81",
+            storageBucket: "my-period-d2e81.firebasestorage.app",
+            messagingSenderId: "128319941956",
+            appId: "1:128319941956:web:032cc7e8536fc15f65bb11",
+            measurementId: "G-0531GJELEV"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        // Document Reference in Firestore (Collection: 'users', Document: 'dart_data')
+        const docRef = doc(db, "users", "dart_data");
+
+        // --- Application Logic ---
+        let trackerData = {}; // Start empty, will load from Firebase
         
+        // Elements
         const calendarDays = document.getElementById('calendarDays');
         const monthYear = document.getElementById('monthYear');
         const noteModal = document.getElementById('noteModal');
         const modalDateTitle = document.getElementById('modalDateTitle');
         const isPeriodCheckbox = document.getElementById('isPeriod');
+        const flowOptionsDiv = document.getElementById('flowOptions');
+        const flowRadios = document.getElementsByName('flowLevel');
         const isSexCheckbox = document.getElementById('isSex');
         const noteText = document.getElementById('noteText');
         const multiSelectMode = document.getElementById('multiSelectMode');
         const actionHint = document.getElementById('actionHint');
+        const themeSelect = document.getElementById('themeSelect');
+        const virtualPet = document.getElementById('virtualPet');
+        const syncStatus = document.getElementById('syncStatus');
         
         let currentDate = new Date();
         let selectedDateStr = "";
@@ -351,6 +504,68 @@
             "July", "August", "September", "October", "November", "December"
         ];
 
+        // --- Load Data from Firebase ---
+        async function loadDataFromCloud() {
+            try {
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    trackerData = docSnap.data();
+                } else {
+                    trackerData = {}; 
+                }
+                syncStatus.textContent = "☁️ Synced to Cloud";
+                syncStatus.classList.remove('loading');
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                syncStatus.textContent = "⚠️ Cloud Error (Using offline mode)";
+                syncStatus.classList.add('loading');
+                // Fallback to local storage if offline
+                trackerData = JSON.parse(localStorage.getItem('periodTrackerDataEnglish')) || {};
+            }
+            renderCalendar();
+        }
+
+        // --- Save Data to Firebase ---
+        async function saveDataToCloud() {
+            syncStatus.textContent = "☁️ Saving...";
+            syncStatus.classList.add('loading');
+            
+            // Save to LocalStorage as backup
+            localStorage.setItem('periodTrackerDataEnglish', JSON.stringify(trackerData));
+
+            try {
+                await setDoc(docRef, trackerData);
+                syncStatus.textContent = "☁️ Synced to Cloud";
+                syncStatus.classList.remove('loading');
+            } catch (error) {
+                console.error("Error saving to cloud:", error);
+                syncStatus.textContent = "⚠️ Save Error (Saved locally)";
+            }
+        }
+
+        // --- Theme Management ---
+        const savedTheme = localStorage.getItem('dartsTheme') || 'mint';
+        themeSelect.value = savedTheme;
+        applyTheme(savedTheme);
+
+        themeSelect.addEventListener('change', (e) => {
+            const theme = e.target.value;
+            applyTheme(theme);
+            localStorage.setItem('dartsTheme', theme);
+        });
+
+        function applyTheme(theme) {
+            document.body.classList.remove('theme-strawberry', 'theme-matcha');
+            if (theme === 'strawberry') document.body.classList.add('theme-strawberry');
+            if (theme === 'matcha') document.body.classList.add('theme-matcha');
+        }
+
+        // --- Flow Options Toggle ---
+        isPeriodCheckbox.addEventListener('change', () => {
+            flowOptionsDiv.style.display = isPeriodCheckbox.checked ? 'flex' : 'none';
+        });
+
+        // --- Calendar Rendering ---
         function renderCalendar() {
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
@@ -382,7 +597,11 @@
                 if (trackerData[dateKey]) {
                     if (trackerData[dateKey].isPeriod) {
                         dayDiv.classList.add('period');
-                        emojiContainer.innerHTML += '🩸';
+                        let flowIcon = '🩸'; 
+                        if (trackerData[dateKey].flow === 'Light') flowIcon = '💧';
+                        else if (trackerData[dateKey].flow === 'Medium') flowIcon = '🩸';
+                        else if (trackerData[dateKey].flow === 'Heavy') flowIcon = '🌊';
+                        emojiContainer.innerHTML += flowIcon;
                     }
                     if (trackerData[dateKey].isSex) {
                         emojiContainer.innerHTML += '🤎';
@@ -396,13 +615,50 @@
                 dayDiv.addEventListener('click', () => handleDayClick(dateKey, i, month, year));
                 calendarDays.appendChild(dayDiv);
             }
+            
+            updateVirtualPet();
+        }
+
+        function updateVirtualPet() {
+            const today = new Date();
+            const todayKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+            
+            if (trackerData[todayKey] && trackerData[todayKey].isPeriod) {
+                virtualPet.innerHTML = '🐻♨️';
+            } else {
+                virtualPet.innerHTML = '🐻✨';
+            }
+        }
+
+        function throwConfetti() {
+            const emojis = ['🩸', '🤎', '🍫', '✨'];
+            for (let i = 0; i < 40; i++) {
+                const conf = document.createElement('div');
+                conf.classList.add('confetti-piece');
+                conf.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                conf.style.left = Math.random() * 100 + 'vw';
+                conf.style.top = '-50px';
+                conf.style.fontSize = (Math.random() * 15 + 15) + 'px';
+                
+                document.body.appendChild(conf);
+                void conf.offsetWidth; 
+
+                setTimeout(() => {
+                    conf.style.top = '110vh';
+                    conf.style.opacity = '0';
+                }, 50 + Math.random() * 50); 
+
+                setTimeout(() => {
+                    conf.remove();
+                }, 2500);
+            }
         }
 
         function handleDayClick(dateKey, day, month, year) {
             if (multiSelectMode.checked) {
                 if (!startDateKey) {
                     startDateKey = dateKey;
-                    actionHint.style.display = 'inline';
+                    actionHint.style.display = 'block';
                 } else {
                     applyMultiSelectPeriod(startDateKey, dateKey);
                     startDateKey = null;
@@ -415,7 +671,7 @@
             }
         }
 
-        function applyMultiSelectPeriod(startStr, endStr) {
+        async function applyMultiSelectPeriod(startStr, endStr) {
             let start = new Date(startStr);
             let end = new Date(endStr);
 
@@ -430,12 +686,17 @@
                 let d = String(curr.getDate()).padStart(2, '0');
                 let key = `${y}-${m}-${d}`;
 
-                if (!trackerData[key]) trackerData[key] = { isPeriod: false, isSex: false, note: "" };
+                if (!trackerData[key]) trackerData[key] = { isPeriod: false, isSex: false, note: "", flow: "Medium" };
                 trackerData[key].isPeriod = true;
+                if(!trackerData[key].flow) trackerData[key].flow = "Medium"; 
 
                 curr.setDate(curr.getDate() + 1);
             }
-            localStorage.setItem('periodTrackerDataEnglish', JSON.stringify(trackerData));
+            
+            // Save to Cloud
+            await saveDataToCloud();
+            renderCalendar();
+            throwConfetti();
         }
 
         function openModal(dateKey, day, month, year) {
@@ -446,12 +707,22 @@
                 isPeriodCheckbox.checked = trackerData[dateKey].isPeriod || false;
                 isSexCheckbox.checked = trackerData[dateKey].isSex || false;
                 noteText.value = trackerData[dateKey].note || "";
+                
+                if (trackerData[dateKey].isPeriod && trackerData[dateKey].flow) {
+                    Array.from(flowRadios).forEach(radio => {
+                        radio.checked = (radio.value === trackerData[dateKey].flow);
+                    });
+                } else {
+                    document.querySelector('input[name="flowLevel"][value="Medium"]').checked = true;
+                }
             } else {
                 isPeriodCheckbox.checked = false;
                 isSexCheckbox.checked = false;
                 noteText.value = "";
+                document.querySelector('input[name="flowLevel"][value="Medium"]').checked = true;
             }
             
+            flowOptionsDiv.style.display = isPeriodCheckbox.checked ? 'flex' : 'none';
             noteModal.style.display = 'flex';
         }
 
@@ -459,7 +730,7 @@
             noteModal.style.display = 'none';
         }
 
-        function saveData() {
+        async function saveData() {
             if (!trackerData[selectedDateStr]) {
                 trackerData[selectedDateStr] = {};
             }
@@ -468,12 +739,21 @@
             trackerData[selectedDateStr].isSex = isSexCheckbox.checked;
             trackerData[selectedDateStr].note = noteText.value;
             
+            if (isPeriodCheckbox.checked) {
+                const selectedFlow = document.querySelector('input[name="flowLevel"]:checked').value;
+                trackerData[selectedDateStr].flow = selectedFlow;
+                throwConfetti(); 
+            } else {
+                delete trackerData[selectedDateStr].flow;
+            }
+            
             if (!trackerData[selectedDateStr].isPeriod && !trackerData[selectedDateStr].isSex && trackerData[selectedDateStr].note.trim() === "") {
                 delete trackerData[selectedDateStr];
             }
             
-            localStorage.setItem('periodTrackerDataEnglish', JSON.stringify(trackerData));
             closeModal();
+            // Save to Cloud and re-render
+            await saveDataToCloud();
             renderCalendar();
         }
 
@@ -499,7 +779,9 @@
             if (e.target === noteModal) closeModal();
         });
 
-        renderCalendar();
+        // Initialize app by fetching data from Cloud first
+        loadDataFromCloud();
+
     </script>
 </body>
 </html>
